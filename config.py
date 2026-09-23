@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 
+import random 
+
 class Config:
     pass
 
 def main() -> None:
     config = parse_config("config.txt")
+    print(vars(config))
 
 
 def parse_config(path: str) -> Config:
@@ -46,6 +49,10 @@ def convert_config(values: dict) -> Config:
         config.perfect = False
     else:
         raise ValueError("PERFECT invalid")
+    if "SEED" in values:
+        config.seed = int(values["SEED"])
+    else:
+        config.seed = random.randint(0, 2**32 - 1)
 
     return config
 
