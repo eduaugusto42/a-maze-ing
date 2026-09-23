@@ -13,7 +13,10 @@ def parse_config(path: str) -> Config:
 
     with open(path, "r") as file:
         for line in file:
-            key, value = line.strip().split('=')
+            line = line.strip()
+            if line == "" or line [0] == '#':
+                continue
+            key, value = line.split('=')
             values[key] = value
 
         for k in keys:
