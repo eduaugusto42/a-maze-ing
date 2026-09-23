@@ -1,9 +1,17 @@
 #!/usr/bin/env python3
 
-import random 
+import random
+
 
 class Config:
-    pass
+    width: int
+    height: int
+    entry: tuple[int, int]
+    exit: tuple[int, int]
+    output_file: str
+    perfect: bool
+    seed: int
+
 
 def main() -> None:
     config = parse_config("config.txt")
@@ -17,7 +25,7 @@ def parse_config(path: str) -> Config:
     with open(path, "r") as file:
         for line in file:
             line = line.strip()
-            if line == "" or line [0] == '#':
+            if line == "" or line[0] == '#':
                 continue
             key, value = line.split('=')
             values[key] = value
@@ -30,7 +38,7 @@ def parse_config(path: str) -> Config:
     return config
 
 
-def convert_config(values: dict) -> Config:
+def convert_config(values: dict[str, str]) -> Config:
     config = Config()
 
     config.width = int(values["WIDTH"])
@@ -78,6 +86,7 @@ def validate_config(config: Config) -> None:
             and config.entry[1] == config.exit[1]
             ):
         raise ValueError("ENTRY must be different from EXIT")
+
 
 if __name__ == "__main__":
     main()
