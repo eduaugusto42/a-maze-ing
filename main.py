@@ -1,5 +1,5 @@
 from amazing.maze_generator import MazeGenerator
-
+from config import parse_config
 
 def print_maze(maze: MazeGenerator) -> None:
     for row in maze.grid_cells:
@@ -34,22 +34,20 @@ def print_maze(maze: MazeGenerator) -> None:
 
 
 def main() -> None:
-    maze1 = MazeGenerator(5, 5, 42)
+    config = parse_config("config.txt")
+    maze1 = MazeGenerator(
+    width=config.width,
+    height=config.height,
+    entry=config.entry,
+    exit=config.exit,
+    perfect=config.perfect,
+    seed=config.seed,
+)
     maze1.generate()
     print_maze(maze1)
     print()
-    maze2 = MazeGenerator(5, 5, 42)
-    maze2.generate()
-    print_maze(maze2)
-    print()
-    maze3 = MazeGenerator(5, 5, 42)
-    maze3.generate()
-    print_maze(maze3)
-    print()
-    maze4 = MazeGenerator(5, 5, 123)
-    maze4.generate()
-    print_maze(maze4)
-
+    for row in maze1.grid_cells:
+        print("".join("#" if cell.blocked else "." for cell in row))
 
 if __name__ == "__main__":
     main()

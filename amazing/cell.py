@@ -5,3 +5,4 @@ class Cell:
         self.east: bool = True
         self.west: bool = True
         self.visited: bool = False
+        self.blocked: bool = False
