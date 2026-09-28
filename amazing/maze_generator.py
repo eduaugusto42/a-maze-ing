@@ -1,6 +1,6 @@
-from config import Config
 from .cell import Cell
-from .perfect_maze import generate_perfect
+from .perfect_true import PerfectMaze
+from .perfect_false import NonPerfectMaze
 from .pattern_42 import stamp_42
 import random
 
@@ -27,17 +27,17 @@ class MazeGenerator:
         self.random = random.Random(self.seed)
         self.grid_cells: list[list[Cell]] = []
 
-    def create_grid(self) -> None:
+    def _create_grid(self) -> None:
         self.grid_cells = []
-        for _ in range(self.height):
+        for row_index in range(self.height):
             row = []
-            for _ in range(self.width):
-                cell = Cell()
+            for column_index in range(self.width):
+                cell = Cell(row_index, column_index)
                 row.append(cell)
             self.grid_cells.append(row)
 
     def generate(self) -> None:
-        self.create_grid()
+        self._create_grid()
         stamp_42(
             self.grid_cells,
             self.width,
@@ -46,10 +46,20 @@ class MazeGenerator:
             self.exit,
         )
         if self.perfect:
-            generate_perfect(
+            perfect_maze = PerfectMaze(
                 self.grid_cells,
                 self.width,
                 self.height,
                 self.entry,
                 self.random,
             )
+            perfect_maze.generate()
+        else:
+            non_perfect_maze = NonPerfectMaze(
+                self.grid_cells,
+                self.width,
+                self.height,
+                self.entry,
+                self.random,
+            )
+            non_perfect_maze.generate()

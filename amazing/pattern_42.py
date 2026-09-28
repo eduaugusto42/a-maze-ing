@@ -29,7 +29,6 @@ def stamp_42(
             if PATTERN_42[y][x] == 1:
                 cell_x = start_x + x
                 cell_y = start_y + y
-
                 if (cell_x, cell_y) == entry or (cell_x, cell_y) == exit:
                     print(
                         "Error: 42 overlaps entry or exit.",

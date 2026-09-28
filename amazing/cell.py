@@ -1,5 +1,7 @@
 class Cell:
-    def __init__(self) -> None:
+    def __init__(self, row: int, column: int) -> None:
+        self.row: int = row
+        self.column: int = column
         self.north: bool = True
         self.south: bool = True
         self.east: bool = True

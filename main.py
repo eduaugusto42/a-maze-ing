@@ -1,5 +1,6 @@
 from amazing.maze_generator import MazeGenerator
 from config import parse_config
+import sys
 
 def print_maze(maze: MazeGenerator) -> None:
     for row in maze.grid_cells:
@@ -34,7 +35,7 @@ def print_maze(maze: MazeGenerator) -> None:
 
 
 def main() -> None:
-    config = parse_config("config.txt")
+    config = parse_config(sys.argv[1])
     maze1 = MazeGenerator(
     width=config.width,
     height=config.height,
