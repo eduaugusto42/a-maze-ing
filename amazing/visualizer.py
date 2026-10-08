@@ -49,7 +49,14 @@ class Visualizer:
         return canvas
 
     def render_42(self, canvas: list[list[str]]) -> None:
-        pass
+        for row in self.grid:
+            for cell in row:
+                if cell.blocked:
+                    x: int = cell.row * 4 + 1 
+                    y: int = cell.row * 2 + 1
+                    canvas[y][x] = "#"
+                    canvas[y][x + 1] = "#"
+                    canvas[y][x + 2] = "#"
 
     def mark_canvas(
             self, canvas: list[list[str]], spot: tuple[int, int], mark: str
