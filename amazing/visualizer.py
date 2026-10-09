@@ -24,7 +24,7 @@ class Visualizer:
         canvas: list[list[str]] = self.render_canvas()
 
         self.render_42(canvas)
-        if self.path:
+        if self.show:
             self.mark_path(canvas)
         self.mark_canvas(canvas, self.entry, "E")
         self.mark_canvas(canvas, self.exit, "X")
@@ -41,16 +41,16 @@ class Visualizer:
                     line += "---+"
                 else:
                     line += "   +"
-            canvas.append(line))
+            canvas.append(list(line))
             line = "|"
             for cell in row:
                 if cell.east:
                     line += "   |"
                 else:
                     line += "    "
-            canvas.append(line))
+            canvas.append(list(line))
         line = "+" + ("---+" * len(self.grid[0]))
-        canvas.append(line))
+        canvas.append(list(line))
         return canvas
 
     def render_42(self, canvas: list[list[str]]) -> None:
@@ -99,11 +99,13 @@ class Visualizer:
 
     def paint_walls(self, canvas: list[list[str]]) -> None:
         colors: list[str] = ["\033[96m", "\033[93m", "\033[1;34m"]
-        walls: set[str] = {"+", "-", "|"}
+        walls: set[str] = {"+", "-", "|", "#"}
         chosen: str = colors[self.color % len(colors)]
         reset: str = "\033[0m"
 
         for i, row in enumerate(canvas):
             for j, ch in enumerate(row):
                 if ch in walls:
+                    if ch == "#":
+                        canvas[i][j] = f"\033[95m{ch}{reset}"
                     canvas[i][j] = f"{chosen}{ch}{reset}"
