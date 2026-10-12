@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-import random
-
-
 class Config:
     width: int
     height: int
