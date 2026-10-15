@@ -30,8 +30,12 @@ def parse_config(path: str) -> Config:
             line = line.strip()
             if line == "" or line[0] == '#':
                 continue
-            key, value = line.split('=')
-            values[key] = value
+            if '=' not in line:
+                raise ValueError(
+                    f"Error: invalid line '{line}' (expected KEY=VALUE)"
+                )
+            key, value = line.split('=', 1)
+            values[key.strip()] = value.strip()
 
         for k in keys:
             if k not in values:

@@ -108,4 +108,5 @@ class Visualizer:
                 if ch in walls:
                     if ch == "#":
                         canvas[i][j] = f"\033[95m{ch}{reset}"
-                    canvas[i][j] = f"{chosen}{ch}{reset}"
+                    else:
+                        canvas[i][j] = f"{chosen}{ch}{reset}"

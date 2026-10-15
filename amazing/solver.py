@@ -25,31 +25,14 @@ class Solver:
             if cell_position == self.exit:
                 break
             cell_current: Cell = self.grid[cell_position[1]][cell_position[0]]
-            if not cell_current.north:
-                north = (cell_position[0], cell_position[1] - 1)
-                if north not in visited:
-                    visited.add(north)
-                    predecessor[north] = cell_position
-                    queue.append(north)
-            if not cell_current.south:
-                south = (cell_position[0], cell_position[1] + 1)
-                if south not in visited:
-                    visited.add(south)
-                    predecessor[south] = cell_position
-                    queue.append(south)
-            if not cell_current.east:
-                east = (cell_position[0] + 1, cell_position[1])
-                if east not in visited:
-                    visited.add(east)
-                    predecessor[east] = cell_position
-                    queue.append(east)
-            if not cell_current.west:
-                west = (cell_position[0] - 1, cell_position[1])
-                if west not in visited:
-                    visited.add(west)
-                    predecessor[west] = cell_position
-                    queue.append(west)
+            for neighbor in self._open_neighbors(cell_current):
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    predecessor[neighbor] = cell_position
+                    queue.append(neighbor)
             queue.pop(0)
+        if self.exit not in visited:
+            raise ValueError("Error: exit unreachable from entry.")
         path: list[tuple[int, int]] = []
         current = self.exit
         while current != self.entry:
@@ -58,3 +41,16 @@ class Solver:
         path.append(self.entry)
         path.reverse()
         return path
+
+    def _open_neighbors(self, cell: Cell) -> list[tuple[int, int]]:
+        neighbors: list[tuple[int, int]] = []
+        x, y = cell.column, cell.row
+        if not cell.north and y - 1 >= 0:
+            neighbors.append((x, y - 1))
+        if not cell.south and y + 1 < self.height:
+            neighbors.append((x, y + 1))
+        if not cell.east and x + 1 < self.width:
+            neighbors.append((x + 1, y))
+        if not cell.west and x - 1 >= 0:
+            neighbors.append((x - 1, y))
+        return neighbors

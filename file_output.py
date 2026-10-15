@@ -14,7 +14,7 @@ class OutputWriter:
         self.entry = entry
         self.exit = exit
         self.path = path
-        self.output_file = "maze.txt"
+        self.output_file = output_file
 
     def grid_to_hex(self) -> list[str]:
         result: list[str] = []
