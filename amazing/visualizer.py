@@ -57,7 +57,7 @@ class Visualizer:
         for row in self.grid:
             for cell in row:
                 if cell.blocked:
-                    x: int = cell.column * 4 + 1 
+                    x: int = cell.column * 4 + 1
                     y: int = cell.row * 2 + 1
                     canvas[y][x] = "#"
                     canvas[y][x + 1] = "#"

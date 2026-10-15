@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+import random
+
+
 class Config:
     width: int
     height: int
@@ -55,6 +58,8 @@ def convert_config(values: dict[str, str]) -> Config:
         raise ValueError("Error in PERFECT: invalid boolean")
     if "SEED" in values:
         config.seed = parse_int(values["SEED"], "SEED")
+    else:
+        config.seed = random.randint(0, 2**32 - 1)
 
     return config
 
