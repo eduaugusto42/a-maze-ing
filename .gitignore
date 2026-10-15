@@ -27,3 +27,12 @@ htmlcov/
 
 # OS
 .DS_Store
+
+# Projeto a-maze-ing: nao entregar
+main.py
+test_*.py
+*_test.py
+test_maze*.txt
+maze.txt
+*.log
+.pdbhistory

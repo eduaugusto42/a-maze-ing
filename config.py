@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-import random
-
-
 class Config:
     width: int
     height: int
@@ -58,10 +55,9 @@ def convert_config(values: dict[str, str]) -> Config:
         raise ValueError("Error in PERFECT: invalid boolean")
     if "SEED" in values:
         config.seed = parse_int(values["SEED"], "SEED")
-    else:
-        config.seed = random.randint(0, 2**32 - 1)
 
     return config
+
 
 def parse_int(value: str, entry: str) -> int:
     try:
@@ -69,13 +65,16 @@ def parse_int(value: str, entry: str) -> int:
     except ValueError as e:
         raise ValueError(f"Error in {entry}: {e}") from e
 
+
 def parse_coordinates(value: str, entry: str) -> tuple[int, int]:
     values = value.split(',')
     if len(values) != 2:
         raise ValueError(
-                f"Error in {entry}: expected two coordinates separated by a comma"
+                f"Error in {entry}: "
+                "expected two coordinates separated by a comma"
                 )
     return (parse_int(values[0], entry), parse_int(values[1], entry))
+
 
 def validate_config(config: Config) -> None:
     if config.width <= 0:
