@@ -1,9 +1,31 @@
+"""The generator of the playable boards.
+
+Braids a perfect maze by opening the walls that remove its
+dead-ends, without ever creating a 3x3 open area.
+"""
+
 from .perfect_true import PerfectMaze
 from .cell import Cell
 from random import Random
 
 
 class NonPerfectMaze:
+    """Carve a maze that is directly usable by a Pac-Man-like game.
+
+    The maze starts as a perfect maze and is then "braided": walls are
+    opened one by one, as long as doing so removes a dead-end and does not
+    create a 3x3 open area. The result is a board where every corridor is
+    reachable, where the four corners and the centre are open corridors and
+    where several independent routes let a chased player always escape.
+
+    Attributes:
+        grid: The maze grid, as a list of rows of Cell objects.
+        width: Number of cells on the horizontal axis.
+        height: Number of cells on the vertical axis.
+        entry: Coordinates (x, y) of the entrance cell.
+        random: The random generator used to choose the walls to open.
+    """
+
     def __init__(
         self,
         grid: list[list[Cell]],
@@ -12,6 +34,15 @@ class NonPerfectMaze:
         entry: tuple[int, int],
         random: Random,
     ) -> None:
+        """Create the carver of a playable board.
+
+        Args:
+            grid: The maze grid, as a list of rows of Cell objects.
+            width: Number of cells on the horizontal axis.
+            height: Number of cells on the vertical axis.
+            entry: Coordinates (x, y) of the entrance cell.
+            random: The random generator used to choose the walls to open.
+        """
         self.grid = grid
         self.width = width
         self.height = height
@@ -19,6 +50,11 @@ class NonPerfectMaze:
         self.random = random
 
     def generate(self) -> None:
+        """Build the playable board in place.
+
+        A perfect maze is carved first, then its dead-ends are removed by
+        opening the walls that connect them to the rest of the board.
+        """
         perfect_maze = PerfectMaze(
             self.grid,
             self.width,
@@ -50,6 +86,15 @@ class NonPerfectMaze:
                 break
 
     def count_dead_ends(self) -> int:
+        """Count the real dead-ends of the maze.
+
+        A real dead-end is a cell with a single open passage whose other
+        walls could be opened toward a normal cell. The cells enclosed by
+        the "42" pattern are not counted.
+
+        Returns:
+            The number of real dead-ends in the maze.
+        """
         dead_ends = 0
         for row in range(self.height):
             for column in range(self.width):
@@ -58,6 +103,16 @@ class NonPerfectMaze:
         return dead_ends
 
     def is_real_dead_end(self, row: int, column: int) -> bool:
+        """Tell whether a cell is a real dead-end.
+
+        Args:
+            row: Index of the row of the cell.
+            column: Index of the column of the cell.
+
+        Returns:
+            True if the cell has a single open passage and could be
+            connected to a normal cell by opening one of its walls.
+        """
         current = self.grid[row][column]
         if current.blocked:
             return False
@@ -96,6 +151,16 @@ class NonPerfectMaze:
     def find_closed_walls(
         self,
     ) -> list[tuple[str, Cell, Cell]]:
+        """List the internal walls that could be opened.
+
+        Only the walls shared by two normal cells are returned, so that the
+        cells of the "42" pattern and the borders of the maze are never
+        touched.
+
+        Returns:
+            A list of (direction, first cell, second cell) tuples, where
+            the direction is either "east" or "south".
+        """
         walls: list[tuple[str, Cell, Cell]] = []
         for row in range(self.height):
             for column in range(self.width):
@@ -124,6 +189,21 @@ class NonPerfectMaze:
         cell_a: Cell,
         cell_b: Cell,
     ) -> bool:
+        """Tell whether a wall can be opened without creating a 3x3 area.
+
+        The wall is opened to test the result and closed again when the
+        test fails, so the maze is left untouched when this method returns
+        False.
+
+        Args:
+            direction: The direction of the wall, either "east" or "south".
+            cell_a: The cell on the first side of the wall.
+            cell_b: The cell on the second side of the wall.
+
+        Returns:
+            True if the wall can be opened, False if it would create a 3x3
+            open area.
+        """
         if direction == "east":
             cell_a.east = False
             cell_b.west = False
@@ -155,6 +235,15 @@ class NonPerfectMaze:
         return True
 
     def is_open_3x3(self, row: int, column: int) -> bool:
+        """Tell whether the 3x3 area at the given position is fully open.
+
+        Args:
+            row: Index of the row of the top-left cell of the area.
+            column: Index of the column of the top-left cell of the area.
+
+        Returns:
+            True if every cell of the area is connected to its neighbours.
+        """
         top_left = self.grid[row][column]
         top_middle = self.grid[row][column + 1]
         top_right = self.grid[row][column + 2]
@@ -198,6 +287,16 @@ class NonPerfectMaze:
         )
 
     def is_open(self, cell_a: Cell, cell_b: Cell) -> bool:
+        """Tell whether two neighbouring cells share an open passage.
+
+        Args:
+            cell_a: The first cell.
+            cell_b: The second cell, which must be a neighbour of the
+                first one.
+
+        Returns:
+            True if the wall between the two cells is open.
+        """
         if (
             cell_b.row == cell_a.row
             and cell_b.column == cell_a.column + 1

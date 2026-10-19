@@ -1,8 +1,34 @@
+"""The generator of the perfect mazes.
+
+Carves the corridors with the recursive backtracker, so that there
+is exactly one path between any two cells of the maze.
+"""
+
 from random import Random
 from .cell import Cell
 
 
 class PerfectMaze:
+    """Carve a perfect maze with the recursive backtracker algorithm.
+
+    The algorithm walks the grid with a depth-first search, always pushing
+    a random unvisited neighbour on a stack and opening the wall between
+    the two cells. Every cell is visited exactly once and every pair of
+    cells is connected by exactly one path, which is what a perfect maze
+    means.
+
+    The blocked cells of the "42" pattern are skipped, so they keep all
+    their walls closed and stay isolated from the rest of the maze. The
+    holes of the glyphs are normal cells and stay part of the maze.
+
+    Attributes:
+        grid: The maze grid, as a list of rows of Cell objects.
+        width: Number of cells on the horizontal axis.
+        height: Number of cells on the vertical axis.
+        entry: Coordinates (x, y) of the entrance cell.
+        random: The random generator used to choose the next cell.
+    """
+
     def __init__(
         self,
         grid: list[list[Cell]],
@@ -11,6 +37,15 @@ class PerfectMaze:
         entry: tuple[int, int],
         random: Random,
     ) -> None:
+        """Create the carver of a perfect maze.
+
+        Args:
+            grid: The maze grid, as a list of rows of Cell objects.
+            width: Number of cells on the horizontal axis.
+            height: Number of cells on the vertical axis.
+            entry: Coordinates (x, y) of the entrance cell.
+            random: The random generator used to choose the next cell.
+        """
         self.grid = grid
         self.width = width
         self.height = height
@@ -18,6 +53,11 @@ class PerfectMaze:
         self.random = random
 
     def generate(self) -> None:
+        """Carve the corridors of the maze in place.
+
+        The grid is expected to be filled with closed cells; this method
+        only opens the walls of the passages it creates.
+        """
         initial_cell: Cell = self.grid[self.entry[1]][self.entry[0]]
         stack: list[Cell] = [initial_cell]
         initial_cell.visited = True
