@@ -40,3 +40,6 @@ test_maze*.txt
 maze.txt
 *.log
 .pdbhistory
+
+# Folha de correcao da avaliacao (nao faz parte do projeto)
+/In*a Projects*.pdf
