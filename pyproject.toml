@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=77.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mazegen"
+version = "1.0.0"
+description = "A reusable maze generator, with a perfect mode and a playable Pac-Man mode."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE.md"]
+authors = [
+    { name = "jcesar-o" },
+    { name = "eduaugu" },
+]
+keywords = ["maze", "generator", "algorithm", "pathfinding", "pacman"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Games/Entertainment",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+
+# The maze generator only uses the standard library.
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/eduaugusto42/a-maze-ing"
+
+[tool.setuptools]
+# The package is declared explicitly: the automatic discovery of a flat
+# layout fails when top level modules sit next to the package.
+packages = ["mazegen"]

@@ -17,6 +17,10 @@ build/
 dist/
 *.egg-info/
 
+# O enunciado do subject e a biblioteca MiniLibX nao fazem parte do projeto
+/en.subject.pdf
+/mlx-2.2.tgz
+
 # Coverage
 .coverage
 htmlcov/
@@ -29,7 +33,7 @@ htmlcov/
 .DS_Store
 
 # Projeto a-maze-ing: nao entregar
-main.py
+# (o entrypoint a_maze_ing.py NAO e ignorado: faz parte da entrega)
 test_*.py
 *_test.py
 test_maze*.txt

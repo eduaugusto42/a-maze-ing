@@ -1,0 +1,17 @@
+[flake8]
+# The A-Maze-ing project adheres to the flake8 coding standard (Subject III.1).
+max-line-length = 79
+# Build artifacts and the MiniLibX sources extracted from mlx-2.2.tgz are not
+# part of the project and must not be analysed.
+exclude =
+    .git,
+    __pycache__,
+    .mypy_cache,
+    .pytest_cache,
+    .venv,
+    venv,
+    build,
+    dist,
+    src,
+    fedora,
+    ubuntu
