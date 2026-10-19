@@ -252,7 +252,12 @@ standard Python distribution and published at the root of the repository:
 ```text
 mazegen-1.0.0-py3-none-any.whl
 mazegen-1.0.0.tar.gz
+mazegen.tar.gz
 ```
+
+`mazegen.tar.gz` is a copy of `mazegen-1.0.0.tar.gz`, kept under the
+plain name as well, so that the source distribution can be found under
+either name.
 
 ### Installing it
 

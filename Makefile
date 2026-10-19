@@ -59,6 +59,7 @@ build:
 	$(PYTHON) -m build
 	cp dist/mazegen-*.whl .
 	cp dist/mazegen-*.tar.gz .
+	cp dist/mazegen-*.tar.gz mazegen.tar.gz
 	@echo ""
 	@echo "Package built, at the root of the repository:"
-	@ls -1 mazegen-*
+	@ls -1 mazegen*
