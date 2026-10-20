@@ -165,9 +165,12 @@ ENTRY=0,0
 EXIT=19,14
 OUTPUT_FILE=maze.txt
 PERFECT=False
-SEED=42
 INTERACTIVE=True
 ```
+
+The `SEED` key is not set here, so every run produces a different maze.
+Adding it — `SEED=42` for instance — makes the maze reproducible, which
+is useful to check a particular result twice.
 
 | Key | Mandatory | Type | Description | Default |
 |---|---|---|---|---|
@@ -268,6 +271,51 @@ pip install mazegen-1.0.0-py3-none-any.whl
 The sources needed to rebuild it are also in the repository: run
 `make build` (or `python3 -m build`) in a virtual environment to
 reproduce the two artifacts.
+
+### Verifying it
+
+The module can be checked from scratch, in the same way as during a peer
+evaluation: rebuild the package in one virtual environment, install the
+result in **another** one, and run the program with the installed
+package.
+
+```bash
+# 1. Rebuild the package in a virtual environment
+cd /path/to/a-maze-ing
+python3 -m venv /tmp/vbuild
+/tmp/vbuild/bin/pip install build
+/tmp/vbuild/bin/python -m build
+ls -1 dist/
+#   mazegen-1.0.0-py3-none-any.whl
+#   mazegen-1.0.0.tar.gz
+
+# 2. Install the freshly built package in another virtual environment
+python3 -m venv /tmp/vinstall
+/tmp/vinstall/bin/pip install dist/mazegen-1.0.0-py3-none-any.whl
+/tmp/vinstall/bin/pip list | grep mazegen
+#   mazegen 1.0.0
+
+# 3. Run the program with the installed package, from outside the
+#    repository, so that the local folder cannot shadow it
+mkdir -p /tmp/testrun && cd /tmp/testrun
+cp /path/to/a-maze-ing/config.txt .
+/tmp/vinstall/bin/python /path/to/a-maze-ing/a_maze_ing.py config.txt
+
+# 4. Check that the installed package is the one being used
+/tmp/vinstall/bin/python -c "import mazegen; print(mazegen.__file__)"
+#   .../site-packages/mazegen/__init__.py
+```
+
+Step 3 waits for a key in the interactive viewer: press `4` to quit, or
+close the standard input. The last command of the step 4 is the one that
+proves the point: when the program is run from outside the repository,
+the `mazegen` package can only come from the virtual environment.
+
+The `maze_analyzer.py` script of the subject then checks the result:
+
+```bash
+python3 maze_analyzer.py maze.txt
+```
 
 ### Using it
 
@@ -397,9 +445,9 @@ interface written down first, would have avoided most of that rework.
 The project relies on the standard 42 toolchain: **Python 3.10+**,
 **GNU Make** for the common tasks, **git** for the versioning, and
 **flake8** and **mypy** for the linting and the static type checking,
-which the subject requires. **pytest** is used for the unit tests, and
-the `maze_analyzer.py` script of the subject to check the generated
-mazes. No other specific tooling was needed.
+which the subject requires. The `maze_analyzer.py` script of the subject
+is used to check the generated mazes, and **pytest** for the unit tests
+written during the development. No other specific tooling was needed.
 
 ## Advanced features
 
